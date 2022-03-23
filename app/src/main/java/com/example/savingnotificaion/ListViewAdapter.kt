@@ -1,4 +1,4 @@
-package com.example.savingnotificaion.ViewModels
+package com.example.savingnotificaion
 
 import android.app.Notification
 import android.view.LayoutInflater

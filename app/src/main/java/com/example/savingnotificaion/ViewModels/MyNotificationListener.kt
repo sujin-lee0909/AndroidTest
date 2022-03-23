@@ -1,12 +1,26 @@
 package com.example.savingnotificaion.ViewModels
 
 import android.app.Notification
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
 import android.service.notification.NotificationListenerService
 import android.service.notification.StatusBarNotification
 import android.util.Log
 
+//이거 왜 object로하면 에러남??
 class MyNotificationListener : NotificationListenerService() {
     private val TAG = "MyNotificationListener"
+    private val nlServiceReceiver : NLServiceReceiver = NLServiceReceiver()
+
+    override fun onCreate() {
+        super.onCreate()
+        val filter = IntentFilter()
+        filter.addAction(".ViewModels.MyNotificationListener")
+        registerReceiver(nlServiceReceiver, filter)
+    }
+
     override fun onNotificationPosted(sbn: StatusBarNotification?) {
         super.onNotificationPosted(sbn)
 
@@ -25,6 +39,14 @@ class MyNotificationListener : NotificationListenerService() {
             extraInfoText
         )
         Log.d(TAG, noti.toString())
+        val intent : Intent = Intent(".ViewModels.MyNotificationListener")
+        intent.putExtra("notification_event", noti.toString())
+        sendBroadcast(intent)
     }
 
+    class NLServiceReceiver : BroadcastReceiver() {
+        override fun onReceive(context: Context?, intent: Intent) {
+        }
+    }
 }
+
