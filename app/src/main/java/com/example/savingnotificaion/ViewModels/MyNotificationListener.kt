@@ -8,10 +8,10 @@ import android.content.IntentFilter
 import android.service.notification.NotificationListenerService
 import android.service.notification.StatusBarNotification
 import android.util.Log
+import java.io.Serializable
 
 //이거 왜 object로하면 에러남??
-class MyNotificationListener : NotificationListenerService() {
-    private val TAG = "MyNotificationListener"
+class MyNotificationListener : NotificationListenerService(){
     private val nlServiceReceiver : NLServiceReceiver = NLServiceReceiver()
 
     override fun onCreate() {
@@ -26,10 +26,8 @@ class MyNotificationListener : NotificationListenerService() {
 
         val packageName : String = sbn?.packageName ?:"Null"
         val extras = sbn?.notification?.extras
-        val extraTitle: String = extras?.get(Notification.EXTRA_TITLE).toString()
         val extraText: String = extras?.get(Notification.EXTRA_TEXT).toString()
         val extraMessagingPerson :String = extras?.get(Notification.EXTRA_MESSAGING_PERSON).toString()
-        val extraBigText: String = extras?.get(Notification.EXTRA_BIG_TEXT).toString()
         val extraInfoText: String = extras?.get(Notification.EXTRA_INFO_TEXT).toString()
 
         val noti = com.example.savingnotificaion.NotificationItem(
@@ -38,9 +36,9 @@ class MyNotificationListener : NotificationListenerService() {
             extraText,
             extraInfoText
         )
-        Log.d(TAG, noti.toString())
+
         val intent : Intent = Intent(".ViewModels.MyNotificationListener")
-        intent.putExtra("notification_event", noti.toString())
+        intent.putExtra("notification_event", noti)
         sendBroadcast(intent)
     }
 
