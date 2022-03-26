@@ -15,8 +15,8 @@ import kotlinx.android.synthetic.main.activity_main.*
 class MainActivity : AppCompatActivity() {
     private val TAG = "MyNotificationListener"
     private val broadcastReceiver = NotificationReceiver()
-    private var items = mutableListOf<NotificationItem>()
-    private val adapter = ListViewAdapter(items)
+    private var datas = mutableListOf<NotificationItem>()
+    private val recyclerViewAdapter = RecyclerViewAdapter(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,10 +30,8 @@ class MainActivity : AppCompatActivity() {
         filter.addAction(".ViewModels.MyNotificationListener")
         registerReceiver(broadcastReceiver, filter)
 
-        items.add(NotificationItem("com.kakao.talk","수진","테스트지롱","갠"))
-
-        val adapter = ListViewAdapter(items)
-        friend_list_view.adapter = adapter
+        friend_recycler_view.adapter = recyclerViewAdapter
+        recyclerViewAdapter.datas = datas
     }
 
     private fun isNotificationPermissionGranted(): Boolean {
@@ -53,10 +51,10 @@ class MainActivity : AppCompatActivity() {
 
     inner class NotificationReceiver : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
-            Log.d("?",intent.getStringExtra("notification_event"))
-            //TODO : 객체 전달하게
-            items.add(NotificationItem("com.kakao.talk", "2","2","2"))
-            adapter.notifyDataSetChanged()
+            val newNotification = intent.getSerializableExtra("notification_event") as NotificationItem
+            Log.d(TAG, newNotification.toString())
+            datas.add(newNotification)
+            recyclerViewAdapter.notifyDataSetChanged()
         }
     }
 }
