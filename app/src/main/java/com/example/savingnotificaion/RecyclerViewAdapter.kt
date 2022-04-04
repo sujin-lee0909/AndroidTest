@@ -24,13 +24,15 @@ class RecyclerViewAdapter(private val context: Context) :
     }
 
     class ViewHolder(view : View) : RecyclerView.ViewHolder(view) {
+        private val groupName: TextView = itemView.findViewById(R.id.group_name)
         private val friendName: TextView = itemView.findViewById(R.id.friend_name)
         private val friendText: TextView = itemView.findViewById(R.id.friend_text)
 //        private val imgProfile: ImageView = itemView.findViewById(R.id.friend_image)
 
         fun bind(item: NotificationItem) {
+            groupName.text = item.notiGroupName
             friendName.text = item.notiSender
-            friendText.text = item.notiSubText
+            friendText.text = item.notiText
         }
 
     }
